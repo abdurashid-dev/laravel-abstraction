@@ -4,42 +4,45 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\StoreRequest;
 use App\Http\Requests\Category\UpdateRequest;
-use App\Models\Category;
+use App\Http\Services\CategoryService;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    protected $service;
+
+    public function __construct()
+    {
+        $this->service = new CategoryService();
+    }
+
     public function index()
     {
-        $items = Category::all();
+        $items = $this->service->index();
         return response()->json(['items' => $items]);
     }
 
     public function show($id)
     {
-        $item = Category::findOrFail($id);
+        $item = $this->service->show($id);
         return response()->json(['item' => $item]);
     }
 
     public function store(StoreRequest $request)
     {
-        $data = $request->validated();
-        $item = Category::create($data);
+        $item = $this->service->store($request->validated());
         return response()->json(['item' => $item]);
     }
 
     public function update(UpdateRequest $request, $id)
     {
-        $item = Category::findOrFail($id);
-        $data = $request->validated();
-        $item->update($data);
+        $item = $this->service->update($request->validated(), $id);
         return response()->json(['item' => $item]);
     }
 
     public function destroy($id)
     {
-        $item = Category::findOrFail($id);
-        $item->delete();
+        $item = $this->service->destroy($id);
         return response()->json(['item' => $item]);
     }
 }
