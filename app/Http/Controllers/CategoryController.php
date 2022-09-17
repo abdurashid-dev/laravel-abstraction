@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Category\StoreRequest;
+use App\Http\Requests\Category\UpdateRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -19,21 +21,17 @@ class CategoryController extends Controller
         return response()->json(['item' => $item]);
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required'
-        ]);
+        $data = $request->validated();
         $item = Category::create($data);
         return response()->json(['item' => $item]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         $item = Category::findOrFail($id);
-        $data = $request->validate([
-            'name' => 'required'
-        ]);
+        $data = $request->validated();
         $item->update($data);
         return response()->json(['item' => $item]);
     }
