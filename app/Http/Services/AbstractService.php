@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+use Illuminate\Support\Facades\Validator;
+
 class AbstractService
 {
     protected $model;
@@ -18,7 +20,15 @@ class AbstractService
 
     public function store(array $data)
     {
-        dd($this->getFields());
+        $fields = $this->getFields();
+        $rules = [];
+        foreach ($fields as $field) {
+            $rules[$field->getName()] = $field->getRules();
+        }
+        $validator = Validator::make($data, $rules);
+        if ($validator->fails()){
+            dd($validator->errors());
+        }
         return $this->model::create($data);
     }
 

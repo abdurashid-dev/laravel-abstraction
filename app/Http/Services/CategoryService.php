@@ -12,7 +12,7 @@ class CategoryService extends AbstractService
     public function getFields()
     {
         return [
-            new TextField('name')
+            TextField::make('name')->setRules('required')
         ];
     }
 }
