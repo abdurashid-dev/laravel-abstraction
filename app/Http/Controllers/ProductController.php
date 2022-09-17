@@ -22,10 +22,7 @@ class ProductController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'price' => 'required'
-        ]);
+        $data = $request->validated();
         $item = Product::create($data);
         return response()->json(['item' => $item]);
     }
@@ -33,10 +30,7 @@ class ProductController extends Controller
     public function update(UpdateRequest $request, $id)
     {
         $item = Product::findOrFail($id);
-        $data = $request->validate([
-            'name' => 'required',
-            'price' => 'required'
-        ]);
+        $data = $request->validated();
         $item->update($data);
         return response()->json(['item' => $item]);
     }
