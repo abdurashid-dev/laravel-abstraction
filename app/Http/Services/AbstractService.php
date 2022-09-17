@@ -31,7 +31,7 @@ class AbstractService
         }
         $data = $validator->validated();
         $object = new $this->model;
-        foreach ($fields as $field){
+        foreach ($fields as $field) {
             $field->fill($object, $data);
         }
         $object->save();
@@ -41,7 +41,22 @@ class AbstractService
     public function update(array $data, $id)
     {
         $item = $this->show($id);
-        return $item->update($data);
+        $fields = $this->getFields();
+        $rules = [];
+        foreach ($fields as $field) {
+            $rules[$field->getName()] = $field->getRules();
+        }
+        $validator = Validator::make($data, $rules);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $data = $validator->validated();
+        $item = new $this->model;
+        foreach ($fields as $field) {
+            $field->fill($item, $data);
+        }
+        $item->save();
+        return $item;
     }
 
     public function destroy($id)
