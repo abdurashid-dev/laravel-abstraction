@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Product\StoreRequest;
+use App\Http\Requests\Product\UpdateRequest;
 use App\Models\Product;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -19,7 +20,7 @@ class ProductController extends Controller
         return response()->json(['item' => $item]);
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $data = $request->validate([
             'name' => 'required',
@@ -29,7 +30,7 @@ class ProductController extends Controller
         return response()->json(['item' => $item]);
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         $item = Product::findOrFail($id);
         $data = $request->validate([
