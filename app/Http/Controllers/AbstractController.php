@@ -30,15 +30,13 @@ class AbstractController extends Controller
 
     public function store()
     {
-        $request = new $this->storeRequest;
-        $item = $this->service->store($request->validated());
+        $item = $this->service->store(request()->all());
         return response()->json(['item' => $item]);
     }
 
     public function update($id)
     {
-        $request = new $this->updateRequest;
-        $item = $this->service->update($request->validated(), $id);
+        $item = $this->service->update(request()->all(), $id);
         return response()->json(['item' => $item]);
     }
 

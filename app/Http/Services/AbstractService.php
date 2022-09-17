@@ -18,6 +18,7 @@ class AbstractService
 
     public function store(array $data)
     {
+        dd($this->getFields());
         return $this->model::create($data);
     }
 
@@ -31,5 +32,10 @@ class AbstractService
     {
         $item = $this->show($id);
         return $item->delete($id);
+    }
+
+    public function getFields()
+    {
+        return [];
     }
 }
