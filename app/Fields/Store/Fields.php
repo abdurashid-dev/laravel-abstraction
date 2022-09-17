@@ -18,6 +18,11 @@ class Fields
         return new $class($name);
     }
 
+    public function fill($object, $data)
+    {
+        $object->{$this->getName()} = $data[$this->getName()];
+    }
+
     function setName($name)
     {
         $this->name = $name;

@@ -26,10 +26,16 @@ class AbstractService
             $rules[$field->getName()] = $field->getRules();
         }
         $validator = Validator::make($data, $rules);
-        if ($validator->fails()){
-            dd($validator->errors());
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
         }
-        return $this->model::create($data);
+        $data = $validator->validated();
+        $object = new $this->model;
+        foreach ($fields as $field){
+            $field->fill($object, $data);
+        }
+        $object->save();
+        return $object;
     }
 
     public function update(array $data, $id)
